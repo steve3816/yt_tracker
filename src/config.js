@@ -16,13 +16,13 @@ const config = {
       name: 'Gemini',
       type: 'gemini',
       apiKey: process.env.GEMINI_API_KEY || '',
-      apiUrl: process.env.GEMINI_API_URL || 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
     },
     deepseek: {
       name: 'DeepSeek',
       type: 'deepseek',
       apiKey: process.env.DEEPSEEK_API_KEY || '',
-      apiUrl: process.env.DEEPSEEK_API_URL || 'https://api.deepseek.ai/v1/generate',
+      // baseURL 由 aiClient.js 的 OpenAI SDK 初始化時直接指定，不需要在此設定
     },
   },
   dryRun: parseBoolean(process.env.DRY_RUN || 'true'),
