@@ -1,0 +1,20 @@
+{
+  "name": "yttracker",
+  "version": "0.1.0",
+  "description": "Fetch YouTube news RSS, generate a summary, and send it to LINE.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "echo \"No lint configured\"",
+    "test": "echo \"No tests yet\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^10.4.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "rss-parser": "^3.12.0"
+  }
+}
