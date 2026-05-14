@@ -61,6 +61,7 @@ async function callDeepSeek(provider, prompt) {
     messages: [{ role: 'user', content: prompt }],
   });
 
+  console.log('DeepSeek 原始回應：', JSON.stringify(response, null, 2));
   const text = response.choices?.[0]?.message?.content;
   if (!text) {
     throw new Error('DeepSeek 回傳格式異常');
