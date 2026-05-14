@@ -1,4 +1,5 @@
 const axios = require('axios');
+const OpenAI = require('openai');
 const config = require('../config');
 
 async function callGemini(provider, prompt) {
@@ -50,21 +51,17 @@ async function callGemini(provider, prompt) {
 }
 
 async function callDeepSeek(provider, prompt) {
-  const response = await axios.post(
-    provider.apiUrl,
-    {
-      prompt,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${provider.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      timeout: 30000,
-    }
-  );
+  const client = new OpenAI({
+    apiKey: provider.apiKey,
+    baseURL: 'https://api.deepseek.com',
+  });
 
-  const text = response.data?.result || response.data?.text || response.data?.output || response.data?.content;
+  const response = await client.chat.completions.create({
+    model: 'deepseek-v4-flash',
+    messages: [{ role: 'user', content: prompt }],
+  });
+
+  const text = response.choices?.[0]?.message?.content;
   if (!text) {
     throw new Error('DeepSeek 回傳格式異常');
   }
