@@ -63,7 +63,10 @@ ${videosText}
 
   const content = await callAIProviders(prompt);
   const videos = parseModelResponse(content.trim());
-  return videos;
+  return {
+    videos,
+    rawItems: items,
+  };
 }
 
 module.exports = {

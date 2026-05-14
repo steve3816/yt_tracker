@@ -11,8 +11,8 @@ async function main() {
   }
 
   console.log(`取得 ${items.length} 支最新影片，分析中...`);
-  const summary = await filterAndSummarize(items); // 給 AI 分析並產生摘要
-  await sendSummary(summary); // 發送摘要到 LINE
+  const { videos, rawItems } = await filterAndSummarize(items); // 給 AI 分析並產生摘要
+  await sendSummary(videos, rawItems); // 發送摘要到 LINE
 }
 
 main().catch((error) => {
