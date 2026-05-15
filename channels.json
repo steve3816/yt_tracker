@@ -8,5 +8,10 @@
     "channelId": "UC5nwNW4KdC0SzrhF9BXEYOQ",
     "description": "TVBS新聞財經影片",
     "criteria": "找出財經或經濟相關的影片"
+  },
+    "bbc_news_summarize_politics":{
+    "channelId": "UC16niRr50-MSBwiO3YDb3RA",
+    "description": "BBC新聞找政治相關",
+    "criteria": "找出政治/國家相關的影片"
   }
 }
