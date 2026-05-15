@@ -1,10 +1,18 @@
+const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config({ path: process.env.ENV_PATH || '.env.local' });
 
 const parseBoolean = (value) => String(value).toLowerCase() === 'true';
 
+const channels = require(path.join(__dirname, '..', 'channels.json'));
+const taskKey = process.env.TASK;
+if (!taskKey) throw new Error('TASK 未設定，請在 .env.local 指定要執行的任務');
+const task = channels[taskKey];
+if (!task) throw new Error(`找不到任務 "${taskKey}"，請確認 channels.json 中有此設定`);
+
 const config = {
-  youtubeRssUrl: process.env.YT_RSS_URL || 'https://www.youtube.com/feeds/videos.xml?channel_id=UCIicAlXlv874Rp9LVfGOJfA',
+  youtubeRssUrl: `https://www.youtube.com/feeds/videos.xml?channel_id=${task.channelId}`,
+  task,
   lineChannelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN || '',
   lineTargetId: process.env.LINE_TARGET_ID || '',
   aiProviderOrder: (process.env.AI_PROVIDER_ORDER || 'gemini,deepseek')

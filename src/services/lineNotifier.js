@@ -14,7 +14,7 @@ function formatVideosMessage(videos) {
     )
     .join('\n\n───────────\n\n');
 
-  return `TVBS 科技新聞摘要\n(共 ${videos.length} 則)\n\n───────────\n\n${message}`;
+  return `${config.task.description}\n(共 ${videos.length} 則)\n\n───────────\n\n${message}`;
 }
 
 function formatAllItemsMessage(rawItems) {
@@ -34,7 +34,7 @@ async function sendSummary(videos, rawItems = []) {
 
   if (!videos || videos.length === 0) {
     const allItemsText = formatAllItemsMessage(rawItems);
-    message = `今天沒有找到科技相關的 YouTube 新聞。\n\n${allItemsText}`;
+    message = `${config.task.description}\n\n今天沒有找到相關的 YouTube 新聞。\n\n${allItemsText}`;
   } else {
     message = formatVideosMessage(videos);
   }

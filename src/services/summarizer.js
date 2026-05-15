@@ -45,21 +45,11 @@ async function filterAndSummarize(items) {
     )
     .join('\n\n');
 
-  const prompt = `以下是 TVBS YouTube 頻道最新的 ${items.length} 支影片列表：
+  const prompt = `以下是最新的 ${items.length} 支影片列表：
 
 ${videosText}
 
-請幫我分析這些影片，並找出所有與科技相關的影片。對於每個科技相關的影片，請提供：
-1. 影片名稱
-2. 影片連結
-3. 50字以內的大綱
-
-請用以下格式回覆，每個影片之間用 "---" 分隔：
-影片名稱：[名稱]
-影片連結：[連結]
-大綱：[大綱內容]
-
-如果沒有科技相關的影片，請回覆 "沒有找到科技相關的影片"。`;
+${config.task.prompt}`;
 
   const content = await callAIProviders(prompt);
   const videos = parseModelResponse(content.trim());
