@@ -2,35 +2,11 @@ const config = require('../config');
 const { callAIProviders } = require('./aiClient');
 
 function parseModelResponse(content) {
-  if (content.includes('沒有找到科技相關的影片')) {
-    return [];
-  }
+  const match = content.match(/\[[\s\S]*\]/);
+  if (!match) return [];
 
-  const videos = [];
-  const sections = content.split('---').filter((s) => s.trim());
-
-  sections.forEach((section) => {
-    const lines = section.trim().split('\n');
-    let title = '';
-    let link = '';
-    let summary = '';
-
-    lines.forEach((line) => {
-      if (line.includes('影片名稱：')) {
-        title = line.replace('影片名稱：', '').trim();
-      } else if (line.includes('影片連結：')) {
-        link = line.replace('影片連結：', '').trim();
-      } else if (line.includes('大綱：')) {
-        summary = line.replace('大綱：', '').trim();
-      }
-    });
-
-    if (title && link) {
-      videos.push({ title, link, summary });
-    }
-  });
-
-  return videos;
+  const parsed = JSON.parse(match[0]);
+  return parsed.filter((v) => v.title && v.link);
 }
 
 async function filterAndSummarize(items) {
@@ -45,14 +21,25 @@ async function filterAndSummarize(items) {
     )
     .join('\n\n');
 
+  const FORMAT_INSTRUCTION = `請依據上述篩選條件分析影片，並以 JSON array 格式回傳符合條件的影片，不符合條件的影片不要包含。
+每個元素格式為：{"title": "影片名稱", "link": "影片連結", "summary": "50字以內的大綱"}
+若無符合條件的影片，回傳空 array：[]
+只回傳 JSON，不要有其他文字。`;
+
   const prompt = `以下是最新的 ${items.length} 支影片列表：
 
 ${videosText}
 
-${config.task.prompt}`;
+篩選條件：${config.task.criteria}
+
+${FORMAT_INSTRUCTION}`;
 
   const content = await callAIProviders(prompt);
-  const videos = parseModelResponse(content.trim());
+  const pubDateMap = new Map(items.map((item) => [item.link, item.pubDate]));
+  const videos = parseModelResponse(content.trim()).map((v) => ({
+    ...v,
+    pubDate: pubDateMap.get(v.link) || '',
+  }));
   return {
     videos,
     rawItems: items,

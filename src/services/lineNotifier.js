@@ -10,7 +10,7 @@ function formatVideosMessage(videos) {
   const message = videos
     .map(
       (video, index) =>
-        `【${index + 1}】${video.title}\n\n${video.summary}\n\n${video.link}`
+        `【${index + 1}】${video.title}\n${video.pubDate}\n\n${video.summary}\n\n${video.link}`
     )
     .join('\n\n───────────\n\n');
 
