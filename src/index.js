@@ -10,7 +10,9 @@ async function main() {
     return;
   }
 
-  console.log(`取得 ${items.length} 支最新影片，分析中...`);
+  console.log(`取得 ${items.length} 支最新影片：`);
+  items.forEach((item, index) => console.log(`  ${index + 1}. ${item.title}`));
+  console.log('分析中...');
   const { videos, rawItems } = await filterAndSummarize(items); // 給 AI 分析並產生摘要
   await sendSummary(videos, rawItems); // 發送摘要到 LINE
 }
