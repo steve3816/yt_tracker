@@ -6,7 +6,7 @@ if (config.lineChannelAccessToken) {
   client = new line.Client({ channelAccessToken: config.lineChannelAccessToken });
 }
 
-function formatVideosMessage(videos) {
+function formatVideosMessage(videos, task) {
   const message = videos
     .map(
       (video, index) =>
@@ -14,7 +14,7 @@ function formatVideosMessage(videos) {
     )
     .join('\n\n───────────\n\n');
 
-  return `${config.task.description}\n(共 ${videos.length} 則)\n\n───────────\n\n${message}`;
+  return `${task.description}\n(共 ${videos.length} 則)\n\n───────────\n\n${message}`;
 }
 
 function formatAllItemsMessage(rawItems) {
@@ -29,14 +29,15 @@ function formatAllItemsMessage(rawItems) {
   return `原始 RSS 影片列表：\n\n${itemsMessage}`;
 }
 
-async function sendSummary(videos, rawItems = []) {
+async function sendSummary(videos, rawItems = [], task) {
+  task = task || config.tasks[0];
   let message;
 
   if (!videos || videos.length === 0) {
     const allItemsText = formatAllItemsMessage(rawItems);
-    message = `${config.task.description}\n\n今天沒有找到相關的 YouTube 新聞。\n\n${allItemsText}`;
+    message = `${task.description}\n\n今天沒有找到相關的 YouTube 新聞。\n\n${allItemsText}`;
   } else {
-    message = formatVideosMessage(videos);
+    message = formatVideosMessage(videos, task);
   }
 
   if (config.dryRun) {

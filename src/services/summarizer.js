@@ -9,7 +9,8 @@ function parseModelResponse(content) {
   return parsed.filter((v) => v.title && v.link);
 }
 
-async function filterAndSummarize(items) {
+async function filterAndSummarize(items, task) {
+  task = task || config.tasks[0];
   if (!config.aiProviderOrder.length) {
     throw new Error('AI_PROVIDER_ORDER 未設定');
   }
@@ -30,7 +31,7 @@ async function filterAndSummarize(items) {
 
 ${videosText}
 
-篩選條件：${config.task.criteria}
+篩選條件：${task.criteria}
 
 ${FORMAT_INSTRUCTION}`;
 
